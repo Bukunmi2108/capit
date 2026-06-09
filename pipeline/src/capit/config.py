@@ -17,6 +17,7 @@ class Config:
     subsample_train: int = 50
     subsample_val: int = 10
     subsample_test: int = 10
+    min_freq: int = 5
 
     @property
     def flickr8k_dir(self) -> Path:
@@ -57,6 +58,10 @@ class Config:
     @property
     def subsample_json(self) -> Path:
         return self.subsample_root / "dataset_flickr8k.json"
+
+    @property
+    def vocab_path(self) -> Path:
+        return self.data_root / "vocab.json"
 
 
 config = Config()

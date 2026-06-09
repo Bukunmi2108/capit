@@ -4,7 +4,10 @@
 !.env.example
 
 docs/
-data/
+data/dev_subsample/
+data/flickr8k/
+data/karpathy/
+
 
 # Python bytecode
 __pycache__/
