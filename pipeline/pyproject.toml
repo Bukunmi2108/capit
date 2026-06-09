@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pipeline"
+name = "capit"
 version = "0.1.0"
-description = "Pipeline package"
+description = "capit — glass-box image captioner (Show, Attend and Tell)"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -14,6 +14,7 @@ dependencies = [
     "pillow",
     "numpy",
     "nltk",
+    "kagglehub",
 ]
 
 [project.optional-dependencies]
@@ -29,8 +30,3 @@ package-dir = {"" = "src"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[dependency-groups]
-dev = [
-    "pytest>=9.0.3",
-]
