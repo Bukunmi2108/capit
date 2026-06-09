@@ -1,2 +1,49 @@
-docs/
+# Secrets / local config
 .env
+.env.*
+!.env.example
+
+# Docs (project convention)
+docs/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv (uv.lock is intentionally committed)
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.cache/
+
+# Type checkers / linters
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# Jupyter
+.ipynb_checkpoints/
+
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
