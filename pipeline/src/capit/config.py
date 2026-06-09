@@ -22,6 +22,8 @@ class Config:
     crop: int = 224
     imagenet_mean: tuple[float, float, float] = (0.485, 0.456, 0.406)
     imagenet_std: tuple[float, float, float] = (0.229, 0.224, 0.225)
+    encoded_size: int = 14
+    encoder_dim: int = 2048
 
     @property
     def flickr8k_dir(self) -> Path:
