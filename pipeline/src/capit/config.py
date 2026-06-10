@@ -24,7 +24,10 @@ class Config:
     imagenet_std: tuple[float, float, float] = (0.229, 0.224, 0.225)
     encoded_size: int = 14
     encoder_dim: int = 2048
+    decoder_dim: int = 512
+    attention_dim: int = 512
 
+    
     @property
     def flickr8k_dir(self) -> Path:
         return self.data_root / "flickr8k"
