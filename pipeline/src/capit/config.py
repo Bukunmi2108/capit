@@ -26,8 +26,12 @@ class Config:
     encoder_dim: int = 2048
     decoder_dim: int = 512
     attention_dim: int = 512
+    embed_dim: int = 512
+    dropout: float = 0.5
+    alpha_c: float = 1.0
+    decoder_lr: float = 4e-4
 
-    
+
     @property
     def flickr8k_dir(self) -> Path:
         return self.data_root / "flickr8k"
