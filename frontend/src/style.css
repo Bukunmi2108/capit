@@ -578,6 +578,16 @@ body {
   letter-spacing: 0.14em;
   color: var(--ink-faint);
 }
+.colophon .gh {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  transition: color 0.15s, border-color 0.15s;
+}
+.colophon .gh:hover {
+  color: var(--signal);
+  border-color: var(--signal);
+}
 
 /* ============================================================================
    motion
