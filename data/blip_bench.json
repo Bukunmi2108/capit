@@ -1,0 +1,30 @@
+{
+  "model": "Salesforce/blip-image-captioning-base",
+  "threads": 2,
+  "torch_threads_available": 2,
+  "peak_rss_mb": 1588.0,
+  "runs": [
+    {
+      "num_beams": 1,
+      "n": 20,
+      "mean_s": 1.737541265299933,
+      "p95_s": 1.9775060462498004,
+      "min_s": 1.541693970999404,
+      "max_s": 1.9899321459997736,
+      "sample_caption": "a woman is taking a picture of a car"
+    },
+    {
+      "num_beams": 3,
+      "n": 20,
+      "mean_s": 2.593055003999962,
+      "p95_s": 2.832075234200511,
+      "min_s": 2.138796926001305,
+      "max_s": 3.0455997650005884,
+      "sample_caption": "the woman is wearing a blue tank top"
+    }
+  ],
+  "headline_beam": 3,
+  "headline_mean_s": 2.59,
+  "space_budget_s": 10.0,
+  "verdict": "SHIP AS-IS (comfortable margin under the 10s Space budget)"
+}
