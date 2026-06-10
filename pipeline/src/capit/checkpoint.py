@@ -18,6 +18,7 @@ class TrainState:
     optim_state: dict[str, Any]
     epoch: int
     best_bleu4: float
+    best_epoch: int
     vocab_sha256: str
 
 
@@ -27,6 +28,7 @@ def save(
     optimizer: Optimizer,
     epoch: int,
     best_bleu4: float,
+    best_epoch: int,
     vocab_sha256: str,
 ) -> None:
     path = Path(path)
@@ -36,6 +38,7 @@ def save(
         "optimizer": optimizer.state_dict(),
         "epoch": epoch,
         "best_bleu4": best_bleu4,
+        "best_epoch": best_epoch,
         "vocab_sha256": vocab_sha256,
     }
     tmp = path.with_name(path.name + ".tmp")
@@ -50,5 +53,6 @@ def load(path: Path | str) -> TrainState:
         optim_state=state["optimizer"],
         epoch=state["epoch"],
         best_bleu4=state["best_bleu4"],
+        best_epoch=state.get("best_epoch", state["epoch"]),
         vocab_sha256=state["vocab_sha256"],
     )

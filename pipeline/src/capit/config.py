@@ -30,6 +30,11 @@ class Config:
     dropout: float = 0.5
     alpha_c: float = 1.0
     decoder_lr: float = 4e-4
+    batch_size: int = 64
+    max_epochs: int = 50
+    num_workers: int = 2
+    grad_clip: float = 5.0
+    patience: int = 10
 
 
     @property
@@ -75,6 +80,10 @@ class Config:
     @property
     def vocab_path(self) -> Path:
         return self.data_root / "vocab.json"
+
+    @property
+    def ckpt_dir(self) -> Path:
+        return self.data_root / "checkpoints"
 
 
 config = Config()
