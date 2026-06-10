@@ -29,6 +29,7 @@ build/
 dist/
 *.egg-info/
 .eggs/
+node_modules/
 
 # Testing / coverage
 .pytest_cache/

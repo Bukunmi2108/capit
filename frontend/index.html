@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>capit — a glass-box image captioner</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <div class="mast-top">
+        <h1 class="wordmark">capit<span class="dot">.</span></h1>
+        <p class="mast-tag">a&nbsp;glass-box<br />image&nbsp;captioner</p>
+      </div>
+      <p class="dek">
+        <em>Show, Attend and Tell</em> — a ResNet-50&nbsp;→&nbsp;Bahdanau&nbsp;attention&nbsp;→&nbsp;LSTM model,
+        trained from scratch on Flickr8k. It shows its work: every word, where it looked, and the
+        roads it didn't take.
+      </p>
+      <dl class="ledger">
+        <div><dt>architecture</dt><dd>show, attend &amp; tell</dd></div>
+        <div><dt>test bleu-4</dt><dd>23.5</dd></div>
+        <div><dt>decode</dt><dd>beam · 3</dd></div>
+        <div><dt>foil</dt><dd>blip-base</dd></div>
+      </dl>
+      <div class="rule"></div>
+    </header>
+
+    <main id="app"></main>
+
+    <footer class="colophon">
+      <span>capit</span><span>·</span><span>glass box vs closed box</span><span>·</span>
+      <span>attention is the receipt</span>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
