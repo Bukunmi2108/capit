@@ -1,0 +1,29 @@
+[project]
+name = "capit-backend"
+version = "0.1.0"
+description = "capit backend — side-by-side SAT + BLIP captioning API"
+requires-python = ">=3.10"
+dependencies = [
+    "capit",
+    "fastapi[standard]",
+    "uvicorn",
+    "python-multipart",
+    "transformers",
+    "huggingface-hub",
+    "pillow",
+    "numpy",
+    "torch",
+    "torchvision",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "httpx"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+capit = { path = "../pipeline", editable = true }
+
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cpu"

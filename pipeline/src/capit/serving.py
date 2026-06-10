@@ -46,6 +46,18 @@ def build_artifact(encoder: Encoder, decoder: Decoder, vocab: Vocab) -> dict[str
     }
 
 
+def center_crop_box(width: int, height: int, preprocess: dict[str, Any]) -> dict[str, float]:
+    """The Resize(short=resize)+CenterCrop(crop) region, as fractions of the original image.
+
+    Resize preserves aspect, so resized-image fractions equal original-image fractions. The
+    frontend positions the attention overlay over this box (non-square uploads misalign otherwise).
+    """
+    resize, crop = preprocess["resize"], preprocess["crop"]
+    scale = resize / min(width, height)
+    rw, rh = width * scale, height * scale
+    return {"x": (rw - crop) / 2 / rw, "y": (rh - crop) / 2 / rh, "w": crop / rw, "h": crop / rh}
+
+
 def make_transform(preprocess: dict[str, Any]):
     return transforms.Compose(
         [
