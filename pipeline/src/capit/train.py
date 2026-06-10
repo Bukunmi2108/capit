@@ -72,6 +72,7 @@ def train(
     data_root: str | Path,
     ckpt_dir: str | Path,
     resume: str = "auto",
+    vocab_path: str | Path | None = None,
     max_epochs: int | None = None,
     num_workers: int | None = None,
 ) -> None:
@@ -80,9 +81,11 @@ def train(
     torch.manual_seed(config.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ckpt_dir = Path(ckpt_dir)
+    if "drive/MyDrive" in str(ckpt_dir) and not Path("/content/drive/MyDrive").is_dir():
+        raise RuntimeError(f"--ckpt-dir {ckpt_dir} is on Drive but it isn't mounted — run the mount cell first")
     latest_path, best_path = ckpt_dir / "latest.pt", ckpt_dir / "best.pt"
 
-    vocab = Vocab.load(config.vocab_path)
+    vocab = Vocab.load(vocab_path or config.vocab_path)
     transform = build_transform()
     train_ds = CaptionDataset(data_root, "train", vocab, transform)
     val_ds = CaptionDataset(data_root, "val", vocab, transform)
@@ -133,9 +136,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-root", default=str(config.subsample_root))
     parser.add_argument("--ckpt-dir", default=str(config.ckpt_dir))
+    parser.add_argument("--vocab-path", default=str(config.vocab_path))
     parser.add_argument("--resume", default="auto", choices=["auto", "none"])
     args = parser.parse_args()
-    train(args.data_root, args.ckpt_dir, args.resume)
+    train(args.data_root, args.ckpt_dir, args.resume, vocab_path=args.vocab_path)
 
 
 if __name__ == "__main__":
