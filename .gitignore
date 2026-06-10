@@ -7,6 +7,7 @@ docs/
 data/dev_subsample/
 data/flickr8k/
 data/karpathy/
+data/*.zip
 
 
 # Python bytecode
