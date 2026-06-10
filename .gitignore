@@ -9,7 +9,7 @@ data/flickr8k/
 data/karpathy/
 data/*.zip
 data/checkpoints/
-
+data/artifact/
 
 # Python bytecode
 __pycache__/

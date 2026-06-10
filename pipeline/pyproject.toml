@@ -15,6 +15,7 @@ dependencies = [
     "numpy",
     "nltk",
     "kagglehub",
+    "huggingface-hub",
 ]
 
 [project.optional-dependencies]

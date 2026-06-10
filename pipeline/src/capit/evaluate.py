@@ -6,6 +6,9 @@ Generates one caption per test image (beam search) and scores it against the 5 r
 from __future__ import annotations
 
 import argparse
+import json
+from pathlib import Path
+
 import torch
 from pycocoevalcap.bleu.bleu import Bleu
 from pycocoevalcap.cider.cider import Cider
@@ -69,6 +72,7 @@ def main() -> None:
     parser.add_argument("--data-root", default=str(config.flickr8k_dir))
     parser.add_argument("--ckpt", default=str(config.ckpt_dir / "best.pt"))
     parser.add_argument("--beams", type=int, nargs="+", default=[1, 3, 5])
+    parser.add_argument("--out-json", help="write the results table to this path for downstream use")
     args = parser.parse_args()
 
     results = evaluate(args.data_root, args.ckpt, tuple(args.beams))
@@ -77,6 +81,8 @@ def main() -> None:
     print("-" * len(header))
     for k, s in results.items():
         print(f"{k:>4}  " + "  ".join(f"{s[m]:>7.2f}" for m in METRICS))
+    if args.out_json:
+        Path(args.out_json).write_text(json.dumps(results, indent=2))
 
 
 if __name__ == "__main__":
