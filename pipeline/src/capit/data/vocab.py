@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from collections import Counter
@@ -41,6 +42,9 @@ class Vocab:
 
     def __len__(self) -> int:
         return len(self.id2word)
+
+    def sha256(self) -> str:
+        return hashlib.sha256(json.dumps(self.id2word, ensure_ascii=False).encode()).hexdigest()
 
     def save(self, path: Path | str) -> None:
         path = Path(path)

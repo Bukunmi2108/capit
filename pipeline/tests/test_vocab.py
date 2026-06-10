@@ -64,6 +64,12 @@ def test_len():
     assert len(v) == 6
 
 
+def test_sha256_depends_only_on_content():
+    v = Vocab.build(CAPS, min_freq=5)
+    assert v.sha256() == Vocab(list(v.id2word)).sha256()
+    assert v.sha256() != Vocab(SPECIALS + ["a", "c", "extra"]).sha256()
+
+
 def test_decode_rejects_out_of_range():
     v = Vocab.build(CAPS, min_freq=5)
     with pytest.raises(ValueError):
