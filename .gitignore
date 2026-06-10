@@ -8,6 +8,7 @@ data/dev_subsample/
 data/flickr8k/
 data/karpathy/
 data/*.zip
+data/checkpoints/
 
 
 # Python bytecode

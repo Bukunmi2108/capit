@@ -35,6 +35,9 @@ class Config:
     num_workers: int = 2
     grad_clip: float = 5.0
     patience: int = 10
+    beam_k: int = 3
+    beam_alpha: float = 0.7
+    max_decode_len: int = 50
 
 
     @property

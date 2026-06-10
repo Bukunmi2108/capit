@@ -30,7 +30,16 @@ class Decoder(nn.Module):
         h = self.init_h(mean_features)
         c = self.init_c(mean_features)
         return h, c
-    
+
+    def step(
+        self, token: torch.Tensor, h: torch.Tensor, c: torch.Tensor, features: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        context, alpha = self.attention(features, h)
+        context = torch.sigmoid(self.f_beta(h)) * context
+        x = torch.cat([self.embedding(token), context], dim=1)
+        h, c = self.decode_step(x, (h, c))
+        return self.fc(self.dropout(h)), alpha, h, c
+
     def forward(
         self, features: torch.Tensor, captions: torch.Tensor, lengths: torch.Tensor
     ) -> tuple[torch.Tensor, torch.Tensor, list[int]]:
@@ -67,11 +76,8 @@ class Decoder(nn.Module):
         outputs: list[list[int]] = [[] for _ in range(batch_size)]
         done = [False] * batch_size
         for _ in range(max_len):
-            context, _ = self.attention(features, h)
-            context = torch.sigmoid(self.f_beta(h)) * context
-            x = torch.cat([self.embedding(prev), context], dim=1)
-            h, c = self.decode_step(x, (h, c))
-            prev = self.fc(h).argmax(dim=1)
+            logits, _, h, c = self.step(prev, h, c, features)
+            prev = logits.argmax(dim=1)
             for i in range(batch_size):
                 if not done[i]:
                     tok = int(prev[i])
