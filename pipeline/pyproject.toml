@@ -21,6 +21,8 @@ dependencies = [
 dev = [
     "pytest",
     "pycocoevalcap",
+    "matplotlib",
+    "scikit-image",
 ]
 
 [[tool.uv.index]]
