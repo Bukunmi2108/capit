@@ -4,26 +4,11 @@ on-disk format (Karpathy JSON + Images/) as the full set."""
 from __future__ import annotations
 
 import json
-import random
 import shutil
+
 from capit.config import config
 from capit.data.download import _copy_atomic
-
-
-def select_records(records: list[dict], counts: dict[str, int], seed: int) -> list[dict]:
-    by_split: dict[str, list[dict]] = {split: [] for split in counts}
-    for rec in records:
-        if rec["split"] in by_split:
-            by_split[rec["split"]].append(rec)
-
-    rng = random.Random(seed)
-    selected: list[dict] = []
-    for split, count in counts.items():
-        pool = sorted(by_split[split], key=lambda r: r["filename"])
-        if len(pool) < count:
-            raise ValueError(f"{split}: need {count}, only {len(pool)} available")
-        selected.extend(rng.sample(pool, count))
-    return selected
+from capit.data.records import select_records
 
 
 def make_subsample() -> None:

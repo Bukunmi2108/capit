@@ -5,15 +5,8 @@ from __future__ import annotations
 import json
 
 from capit.config import config
+from capit.data.records import train_captions
 from capit.data.vocab import Vocab
-
-
-def train_captions(records: list[dict]) -> list[list[str]]:
-    captions = [s["tokens"] for r in records if r["split"] == "train" for s in r["sentences"]]
-    if not captions:
-        splits = sorted({r["split"] for r in records})
-        raise ValueError(f"no train records found; available splits: {splits}")
-    return captions
 
 
 def build_vocab() -> None:

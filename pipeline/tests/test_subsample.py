@@ -5,14 +5,12 @@ it hasn't been generated.
 """
 
 import json
-import sys
 from collections import Counter
-from pathlib import Path
-import pytest
-from capit.config import config
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from make_subsample import select_records  # noqa: E402
+import pytest
+
+from capit.config import config
+from capit.data.records import select_records
 
 
 def _records(split: str, n: int) -> list[dict]:

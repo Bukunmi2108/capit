@@ -5,15 +5,11 @@ gate lives in scripts/overfit_one_batch.py (run + eyeball the decoded captions).
 """
 
 import os
-import sys
-from pathlib import Path
 
 import pytest
 
 from capit.config import config
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from overfit_one_batch import run_overfit  # noqa: E402
+from capit.overfit import run_overfit
 
 pytestmark = pytest.mark.skipif(
     os.environ.get("RUN_OVERFIT") != "1"

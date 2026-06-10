@@ -4,14 +4,11 @@ Pure tests on a hand-built vocab always run; the size-band guard on the built
 data/vocab.json skips when it hasn't been generated.
 """
 
-import sys
-from pathlib import Path
 import pytest
-from capit.config import config
-from capit.data.vocab import END, PAD, SPECIALS, START, UNK, Vocab
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from build_vocab import train_captions  # noqa: E402
+from capit.config import config
+from capit.data.records import train_captions
+from capit.data.vocab import END, PAD, SPECIALS, START, UNK, Vocab
 
 # a:5, b:4, c:5, d:1  → at min_freq=5 keep {a, c}; b and d drop.
 CAPS = [["a", "c"]] * 5 + [["b"]] * 4 + [["d"]]
