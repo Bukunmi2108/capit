@@ -23,16 +23,30 @@ from capit.serving import center_crop_box, load_artifact, make_transform
 
 MAX_BYTES = 8 * 1024 * 1024
 BLIP_MODEL = "Salesforce/blip-image-captioning-base"
+ARTIFACT_REPO = os.environ.get("CAPIT_ARTIFACT_REPO")
 ARTIFACT_DIR = Path(os.environ.get("CAPIT_ARTIFACT_DIR", Path(__file__).resolve().parents[1] / "data" / "artifact"))
 ALLOWED_ORIGINS = os.environ.get("CAPIT_CORS", "http://localhost:5173,http://localhost:3000").split(",")
 
 state: dict = {}
 
 
+def _artifact_paths() -> tuple[Path, Path]:
+    """Hub repo (Space; baked into the image cache at build) or a local dir (dev)."""
+    if ARTIFACT_REPO:
+        from huggingface_hub import hf_hub_download
+
+        return (
+            Path(hf_hub_download(ARTIFACT_REPO, "capit-sat.pt")),
+            Path(hf_hub_download(ARTIFACT_REPO, "vocab.json")),
+        )
+    return ARTIFACT_DIR / "capit-sat.pt", ARTIFACT_DIR / "vocab.json"
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     torch.set_num_threads(2)
-    encoder, decoder, vocab, preprocess = load_artifact(ARTIFACT_DIR / "capit-sat.pt", ARTIFACT_DIR / "vocab.json")
+    artifact, vocab_path = _artifact_paths()
+    encoder, decoder, vocab, preprocess = load_artifact(artifact, vocab_path)
     state.update(
         encoder=encoder,
         decoder=decoder,
