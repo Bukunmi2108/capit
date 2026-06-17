@@ -1,12 +1,23 @@
 import { describe, expect, it } from "vitest";
 
 import type { SatResult } from "./api";
-import { blipCard, dropzone, errorView, results, satCard, wakingBanner } from "./render";
+import {
+  blipCard,
+  dropzone,
+  errorView,
+  results,
+  satCard,
+  wakingPanel,
+} from "./render";
 
 const sat: SatResult = {
   caption: "a dog runs",
   words: ["a", "dog", "runs"],
-  attention: [new Array(196).fill(0), new Array(196).fill(0), new Array(196).fill(0)],
+  attention: [
+    new Array(196).fill(0),
+    new Array(196).fill(0),
+    new Array(196).fill(0),
+  ],
   crop: { x: 0, y: 0, w: 1, h: 1 },
   beams: [
     { caption: "a dog runs", score: -0.9 },
@@ -21,7 +32,9 @@ describe("render", () => {
     expect(card.querySelectorAll(".word").length).toBe(3);
     expect(card.querySelector(".caption")?.textContent).toContain("dog");
     expect(card.querySelectorAll(".beams li").length).toBe(2);
-    expect(card.querySelector(".beams li")?.classList.contains("winner")).toBe(true);
+    expect(card.querySelector(".beams li")?.classList.contains("winner")).toBe(
+      true,
+    );
     expect(card.querySelector("canvas.attn")).not.toBeNull();
     expect(card.textContent).toContain("42 ms");
   });
@@ -34,13 +47,19 @@ describe("render", () => {
   });
 
   it("results renders both cards when both models are present", () => {
-    const row = results({ sat, blip: { caption: "two dogs", decode_ms: 99 } }, "blob:fake");
+    const row = results(
+      { sat, blip: { caption: "two dogs", decode_ms: 99 } },
+      "blob:fake",
+    );
     expect(row.querySelector(".card.glass")).not.toBeNull();
     expect(row.querySelector(".card.closed")).not.toBeNull();
   });
 
-  it("wakingBanner and errorView render and the retry button fires", () => {
-    expect(wakingBanner().textContent).toContain("waking up");
+  it("wakingPanel and errorView render and the retry button fires", () => {
+    const panel = wakingPanel();
+    expect(panel.textContent).toContain("system is waking up");
+    expect(panel.querySelector(".pulse")).not.toBeNull(); // live indicator
+    expect(panel.querySelector(".elapsed")?.textContent).toBe("0s"); // ticked by main.ts
     let retried = false;
     const view = errorView("could not decode image", () => {
       retried = true;

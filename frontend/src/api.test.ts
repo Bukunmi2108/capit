@@ -4,11 +4,15 @@ import { caption, health } from "./api";
 
 afterEach(() => vi.restoreAllMocks());
 
-function mockFetch(impl: () => Promise<Response>): void {
+function mockFetch(
+  impl: (...args: Parameters<typeof fetch>) => Promise<Response>,
+): void {
   vi.stubGlobal("fetch", vi.fn(impl));
 }
 
-const file = new File([new Uint8Array([1, 2, 3])], "x.png", { type: "image/png" });
+const file = new File([new Uint8Array([1, 2, 3])], "x.png", {
+  type: "image/png",
+});
 
 describe("health", () => {
   it("is true when /health responds ok", async () => {
@@ -22,12 +26,32 @@ describe("health", () => {
     });
     expect(await health()).toBe(false);
   });
+
+  it("is false when a sleeping Space hangs past the timeout", async () => {
+    mockFetch(
+      (_url, init) =>
+        new Promise((_resolve, reject) =>
+          (init?.signal as AbortSignal | undefined)?.addEventListener(
+            "abort",
+            () => reject(new DOMException("aborted", "AbortError")),
+          ),
+        ),
+    );
+    expect(await health(10)).toBe(false);
+  });
 });
 
 describe("caption", () => {
   it("returns the parsed response on 200", async () => {
     const body = {
-      sat: { caption: "a dog", words: ["a", "dog"], attention: [[0], [0]], crop: { x: 0, y: 0, w: 1, h: 1 }, beams: [], decode_ms: 1 },
+      sat: {
+        caption: "a dog",
+        words: ["a", "dog"],
+        attention: [[0], [0]],
+        crop: { x: 0, y: 0, w: 1, h: 1 },
+        beams: [],
+        decode_ms: 1,
+      },
       blip: { caption: "a dog", decode_ms: 2 },
     };
     mockFetch(async () => new Response(JSON.stringify(body), { status: 200 }));
@@ -37,8 +61,13 @@ describe("caption", () => {
   });
 
   it("throws ApiError carrying the status on 422", async () => {
-    mockFetch(async () => new Response("could not decode image", { status: 422 }));
-    await expect(caption(file)).rejects.toMatchObject({ status: 422, name: "ApiError" });
+    mockFetch(
+      async () => new Response("could not decode image", { status: 422 }),
+    );
+    await expect(caption(file)).rejects.toMatchObject({
+      status: 422,
+      name: "ApiError",
+    });
   });
 
   it("propagates a network error", async () => {

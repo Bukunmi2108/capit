@@ -36,7 +36,12 @@ body {
   font-optical-sizing: auto;
   line-height: 1.55;
   /* faint ruled-paper horizon line + warm vignette */
-  background-image: radial-gradient(120% 80% at 50% -10%, #f6f1e6 0%, var(--paper) 45%, var(--paper-deep) 100%);
+  background-image: radial-gradient(
+    120% 80% at 50% -10%,
+    #f6f1e6 0%,
+    var(--paper) 45%,
+    var(--paper-deep) 100%
+  );
   background-attachment: fixed;
 }
 
@@ -165,7 +170,10 @@ body {
   font-size: 1.25rem;
   color: var(--ink-soft);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s;
 }
 .dropzone::before {
   content: "✦";
@@ -213,7 +221,10 @@ body {
   cursor: pointer;
   filter: grayscale(0.4) contrast(1.05);
   border: 1px solid var(--rule);
-  transition: filter 0.2s, transform 0.2s, border-color 0.2s;
+  transition:
+    filter 0.2s,
+    transform 0.2s,
+    border-color 0.2s;
 }
 .sample:hover {
   filter: none;
@@ -224,16 +235,36 @@ body {
 /* ============================================================================
    transient states
    ========================================================================== */
-.banner {
+.waking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 5rem 0;
+  text-align: center;
+}
+.waking .pulse {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 0 var(--signal-wash);
+  animation: pulse 1.6s ease-out infinite;
+}
+.waking-label {
   font-family: var(--mono);
-  font-size: 0.82rem;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+.waking-sub {
+  font-family: var(--mono);
+  font-size: 0.8rem;
   letter-spacing: 0.04em;
-  color: #6a4a12;
-  background: #f3e7c8;
-  border: 1px solid #d8bf86;
-  border-left: 3px solid var(--signal);
-  padding: 0.65rem 1rem;
-  margin-bottom: 1.4rem;
+  color: var(--ink-soft);
+}
+.waking-sub .elapsed {
+  font-variant-numeric: tabular-nums;
 }
 
 .status {
@@ -337,7 +368,9 @@ body {
   border: 1px solid var(--rule);
   border-radius: 2px;
   padding: clamp(1rem, 2.5vw, 1.6rem);
-  box-shadow: 0 1px 0 #fffaf0 inset, 0 18px 40px -28px rgba(60, 45, 20, 0.55);
+  box-shadow:
+    0 1px 0 #fffaf0 inset,
+    0 18px 40px -28px rgba(60, 45, 20, 0.55);
 }
 .card.glass h2 .tag {
   color: var(--signal);
@@ -396,7 +429,9 @@ body {
   background-image: linear-gradient(transparent 58%, var(--signal-wash) 0);
   background-size: 0% 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.2s ease, color 0.15s;
+  transition:
+    background-size 0.2s ease,
+    color 0.15s;
 }
 .word.active {
   background-size: 100% 100%;
@@ -429,7 +464,10 @@ body {
   width: 34px;
   height: 30px;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
 }
 .controls button:hover {
   border-color: var(--signal);
@@ -536,7 +574,11 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: repeating-linear-gradient(45deg, transparent 0 9px, rgba(255, 255, 255, 0.018) 9px 10px);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 9px,
+    rgba(255, 255, 255, 0.018) 9px 10px
+  );
 }
 .card.closed h2 {
   color: #f0e7d4;
@@ -582,7 +624,9 @@ body {
   color: var(--ink-soft);
   text-decoration: none;
   border-bottom: 1px solid var(--rule);
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 .colophon .gh:hover {
   color: var(--signal);
@@ -626,6 +670,20 @@ body {
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--signal-wash);
+    opacity: 1;
+  }
+  70% {
+    box-shadow: 0 0 0 18px transparent;
+    opacity: 0.7;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+    opacity: 1;
   }
 }
 

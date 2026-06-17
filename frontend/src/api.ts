@@ -44,16 +44,24 @@ export class ApiError extends Error {
   }
 }
 
-export async function health(): Promise<boolean> {
+export async function health(timeoutMs = 5_000): Promise<boolean> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(`${API_URL}/health`);
+    const res = await fetch(`${API_URL}/health`, { signal: controller.signal });
     return res.ok;
   } catch {
-    return false;
+    return false; // network rejected, or a sleeping Space hung past the timeout
+  } finally {
+    clearTimeout(timer);
   }
 }
 
-export async function caption(file: File, model: Model = "both", beam = 3): Promise<CaptionResponse> {
+export async function caption(
+  file: File,
+  model: Model = "both",
+  beam = 3,
+): Promise<CaptionResponse> {
   const form = new FormData();
   form.append("file", file);
   const controller = new AbortController();
@@ -65,7 +73,10 @@ export async function caption(file: File, model: Model = "both", beam = 3): Prom
       signal: controller.signal,
     });
     if (!res.ok) {
-      throw new ApiError(res.status, await res.text().catch(() => res.statusText));
+      throw new ApiError(
+        res.status,
+        await res.text().catch(() => res.statusText),
+      );
     }
     return (await res.json()) as CaptionResponse;
   } finally {

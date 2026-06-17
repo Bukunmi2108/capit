@@ -18,7 +18,11 @@ export function argmax(values: number[]): number {
 }
 
 /** The center-crop region (fractions of the original) scaled to displayed-image pixels. */
-export function cropRect(crop: Crop, imageWidth: number, imageHeight: number): Rect {
+export function cropRect(
+  crop: Crop,
+  imageWidth: number,
+  imageHeight: number,
+): Rect {
   return {
     left: crop.x * imageWidth,
     top: crop.y * imageHeight,
@@ -28,7 +32,12 @@ export function cropRect(crop: Crop, imageWidth: number, imageHeight: number): R
 }
 
 /** Pixel center of attention cell `index` (0..195) within the crop region. */
-export function cellCenter(index: number, crop: Crop, imageWidth: number, imageHeight: number): { x: number; y: number } {
+export function cellCenter(
+  index: number,
+  crop: Crop,
+  imageWidth: number,
+  imageHeight: number,
+): { x: number; y: number } {
   const rect = cropRect(crop, imageWidth, imageHeight);
   const row = Math.floor(index / GRID);
   const col = index % GRID;
@@ -58,7 +67,11 @@ export function paintHeatmap(canvas: HTMLCanvasElement, alpha: number[]): void {
 }
 
 /** Lay the heatmap canvas over the crop region of its sibling image (offset-parent positioned). */
-export function positionOverlay(canvas: HTMLCanvasElement, image: HTMLImageElement, crop: Crop): void {
+export function positionOverlay(
+  canvas: HTMLCanvasElement,
+  image: HTMLImageElement,
+  crop: Crop,
+): void {
   const rect = cropRect(crop, image.clientWidth, image.clientHeight);
   canvas.style.left = `${image.offsetLeft + rect.left}px`;
   canvas.style.top = `${image.offsetTop + rect.top}px`;

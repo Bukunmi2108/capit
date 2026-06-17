@@ -2,7 +2,11 @@ import type { Beam, BlipResult, CaptionResponse, SatResult } from "./api";
 
 type Attr = string | number | boolean | EventListener;
 
-export function h(tag: string, attrs: Record<string, Attr> = {}, ...children: (Node | string)[]): HTMLElement {
+export function h(
+  tag: string,
+  attrs: Record<string, Attr> = {},
+  ...children: (Node | string)[]
+): HTMLElement {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs)) {
     if (key.startsWith("on") && typeof value === "function") {
@@ -23,17 +27,31 @@ export function clear(root: HTMLElement): void {
 
 async function asFile(url: string): Promise<File> {
   const blob = await (await fetch(url)).blob();
-  return new File([blob], url.split("/").pop() ?? "sample.jpg", { type: blob.type || "image/jpeg" });
+  return new File([blob], url.split("/").pop() ?? "sample.jpg", {
+    type: blob.type || "image/jpeg",
+  });
 }
 
-export function dropzone(onFile: (file: File) => void, samples: string[]): HTMLElement {
-  const input = h("input", { type: "file", accept: "image/*", class: "file-input" }) as HTMLInputElement;
+export function dropzone(
+  onFile: (file: File) => void,
+  samples: string[],
+): HTMLElement {
+  const input = h("input", {
+    type: "file",
+    accept: "image/*",
+    class: "file-input",
+  }) as HTMLInputElement;
   input.addEventListener("change", () => {
     const file = input.files?.[0];
     if (file) onFile(file);
   });
 
-  const zone = h("div", { class: "dropzone" }, h("p", {}, "drop an image, or "), h("label", { class: "browse" }, "browse", input));
+  const zone = h(
+    "div",
+    { class: "dropzone" },
+    h("p", {}, "drop an image, or "),
+    h("label", { class: "browse" }, "browse", input),
+  );
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
     zone.classList.add("over");
@@ -52,26 +70,56 @@ export function dropzone(onFile: (file: File) => void, samples: string[]): HTMLE
     return img;
   });
   const strip = samples.length
-    ? h("div", { class: "samples" }, h("span", { class: "samples-label" }, "try to break it:"), ...thumbs)
+    ? h(
+        "div",
+        { class: "samples" },
+        h("span", { class: "samples-label" }, "try to break it:"),
+        ...thumbs,
+      )
     : h("div", { class: "samples" });
 
   return h("div", { class: "intake" }, zone, strip);
 }
 
 export function statusView(label: string): HTMLElement {
-  return h("div", { class: "status" }, h("span", { class: "spinner" }), h("span", {}, label));
+  return h(
+    "div",
+    { class: "status" },
+    h("span", { class: "spinner" }),
+    h("span", {}, label),
+  );
 }
 
-export function wakingBanner(): HTMLElement {
-  return h("div", { class: "banner" }, "model waking up (~1 min)…");
+export function wakingPanel(): HTMLElement {
+  return h(
+    "div",
+    { class: "waking" },
+    h("span", { class: "pulse" }),
+    h("p", { class: "waking-label" }, "system is waking up"),
+    h(
+      "p",
+      { class: "waking-sub" },
+      h("span", {}, "cold start takes about a minute · "),
+      h("span", { class: "elapsed" }, "0s"),
+    ),
+  );
 }
 
 export function errorView(message: string, onRetry: () => void): HTMLElement {
-  return h("div", { class: "error" }, h("p", {}, message), h("button", { class: "retry", onClick: onRetry }, "try again"));
+  return h(
+    "div",
+    { class: "error" },
+    h("p", {}, message),
+    h("button", { class: "retry", onClick: onRetry }, "try again"),
+  );
 }
 
 export function resetButton(onReset: () => void): HTMLElement {
-  return h("button", { class: "reset", onClick: onReset }, "caption another image");
+  return h(
+    "button",
+    { class: "reset", onClick: onReset },
+    "caption another image",
+  );
 }
 
 function wordSpans(words: string[]): HTMLElement[] {
@@ -126,7 +174,13 @@ export function satCard(sat: SatResult, imageUrl: string): HTMLElement {
     h("button", { class: "play", title: "play" }, "▶"),
     h("button", { class: "pause", title: "pause" }, "❚❚"),
     h("button", { class: "step", title: "step" }, "▷❘"),
-    h("input", { type: "range", class: "scrub", min: 0, max: Math.max(0, sat.words.length - 1), value: 0 }),
+    h("input", {
+      type: "range",
+      class: "scrub",
+      min: 0,
+      max: Math.max(0, sat.words.length - 1),
+      value: 0,
+    }),
     h("span", { class: "counter" }, `00 / ${pad(sat.words.length)}`),
   );
   return h(
@@ -152,7 +206,10 @@ export function blipCard(blip: BlipResult): HTMLElement {
   );
 }
 
-export function results(response: CaptionResponse, imageUrl: string): HTMLElement {
+export function results(
+  response: CaptionResponse,
+  imageUrl: string,
+): HTMLElement {
   const row = h("div", { class: "results" });
   if (response.sat) row.append(satCard(response.sat, imageUrl));
   if (response.blip) row.append(blipCard(response.blip));

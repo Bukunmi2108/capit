@@ -27,7 +27,10 @@ describe("attention crop mapping", () => {
     const rect = cropRect(crop, W, H);
     expect(center.x).toBeGreaterThanOrEqual(rect.left);
     expect(center.x).toBeLessThanOrEqual(rect.left + rect.width);
-    expect(center.x).toBeCloseTo(rect.left + ((7 + 0.5) / GRID) * rect.width, 6);
+    expect(center.x).toBeCloseTo(
+      rect.left + ((7 + 0.5) / GRID) * rect.width,
+      6,
+    );
     expect(center.y).toBeCloseTo(((3 + 0.5) / GRID) * H, 6);
   });
 });
